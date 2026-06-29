@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en" data-mode="light" data-direction="swiss" data-typeface="plex" style="--accent:#2563eb; --accent-contrast:#ffffff;">
+<!-- project-blueprint template · v3 (high-fidelity copy of claude.ai "Design system for blueprint") -->
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{{PROJECT_TITLE}} — Blueprint</title>
+<!-- Mermaid renders diagrams during authoring. The build step
+     (scripts/build_blueprint.mjs) renders each diagram in BOTH light and dark and
+     inlines the two SVGs, removing this <script> so the shipped file opens offline
+     and the diagrams re-theme live with the palette. -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.6.0/dist/mermaid.min.js"></script>
+<script>window.__widgets = [];</script>
+<!-- Machine-readable design-decision log (SKILL.md step 2). Drives the Decisions
+     tab, which is rendered from this JSON by the script at the bottom. Recover with
+       JSON.parse(document.getElementById('design-decisions').textContent) -->
+<script type="application/json" id="design-decisions">{{DESIGN_DECISIONS_JSON}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Serif:wght@400;500;600&family=Schibsted+Grotesk:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  /* ============ DESIGN SYSTEM (verbatim from assets/design-system.css) ============ */
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  ::selection { background: color-mix(in srgb, var(--accent) 22%, transparent); }
+  :root {
+    --bg:#f6f7f8; --bg-elev:#ffffff; --bg-elev-2:#eef0f3;
+    --border:#e4e7eb; --border-strong:#cdd2da;
+    --text:#13161b; --text-dim:#565d68; --text-faint:#8b919c;
+    --accent:#2563eb; --accent-contrast:#ffffff;
+    --ok:#0a8f5f; --warn:#b9770a; --danger:#d1453b;
+    --shadow:0 1px 2px rgba(18,22,28,.04), 0 2px 8px rgba(18,22,28,.05);
+    --radius:5px; --radius-sm:3px; --radius-lg:8px;
+    --font-head:'IBM Plex Sans',system-ui,sans-serif;
+    --font-body:'IBM Plex Sans',system-ui,sans-serif;
+    --font-mono:'IBM Plex Mono',ui-monospace,monospace;
+  }
+  [data-mode="dark"] {
+    --bg:#0a0b0e; --bg-elev:#121419; --bg-elev-2:#1a1d24;
+    --border:#262a32; --border-strong:#373c47;
+    --text:#e9ebf0; --text-dim:#99a0ac; --text-faint:#6a7180;
+    --ok:#34c08c; --warn:#e0a13a; --danger:#f06a5f;
+    --shadow:0 1px 2px rgba(0,0,0,.35), 0 4px 14px rgba(0,0,0,.3);
+  }
+  [data-direction="technical"] { --radius:3px; --radius-sm:2px; --radius-lg:4px; }
+  [data-direction="saas"] { --radius:10px; --radius-sm:7px; --radius-lg:16px; }
+  [data-typeface="grotesk"] {
+    --font-head:'Schibsted Grotesk',system-ui,sans-serif;
+    --font-body:'Hanken Grotesk',system-ui,sans-serif;
+    --font-mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  [data-typeface="editorial"] {
+    --font-head:'IBM Plex Serif',Georgia,serif;
+    --font-body:'IBM Plex Sans',system-ui,sans-serif;
+    --font-mono:'IBM Plex Mono',ui-monospace,monospace;
+  }
+  @keyframes addyblink { 0%,49%{opacity:1} 50%,100%{opacity:0} }
+  .mermaid svg, .diagram svg { max-width:100%; height:auto; display:block; margin:0 auto; }
+
+  /* ============ Layout ============ */
+  body { background-color: var(--bg); color: var(--text); font-family: var(--font-body);
+    font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;
+    transition: background-color .2s ease, color .2s ease; }
+  .wrap { min-height:100vh; }
+  header.site { position:sticky; top:0; z-index:50;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom:1px solid var(--border); }
+  .header-inner { max-width:880px; margin:0 auto; padding:18px 24px 0; }
+  .header-top { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; }
+  .eyebrow { font-family:var(--font-mono); font-size:11px; font-weight:600; letter-spacing:.16em; color:var(--text-faint); text-transform:uppercase; }
+  .doc-title { font-family:var(--font-head); font-size:26px; font-weight:600; letter-spacing:-0.02em; margin-top:6px; line-height:1.15; }
+  .mode-pill { flex:none; display:inline-flex; align-items:center; gap:7px; font-family:var(--font-mono); font-size:12px; font-weight:600; color:var(--text-dim); background:var(--bg-elev); border:1px solid var(--border); border-radius:999px; padding:7px 13px; cursor:pointer; }
+  nav.tabs { display:flex; gap:4px; margin-top:18px; flex-wrap:wrap; }
+  nav.tabs button { appearance:none; background:transparent; border:none; border-bottom:2px solid transparent; color:var(--text-dim); font-family:var(--font-mono); font-size:13px; font-weight:600; letter-spacing:.02em; padding:10px 14px 12px; cursor:pointer; }
+  nav.tabs button:hover { color:var(--text); }
+  nav.tabs button[aria-selected="true"] { color:var(--text); border-bottom-color:var(--accent); }
+  main { max-width:880px; margin:0 auto; padding:36px 24px 96px; }
+  .panel { display:none; }
+  .panel.active { display:block; animation: fade .2s ease; }
+  @keyframes fade { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }
+
+  /* ============ Editorial typography ============ */
+  .tab-h1 { font-family:var(--font-head); font-size:38px; font-weight:600; letter-spacing:-0.03em; line-height:1.08; margin:0 0 18px; text-wrap:balance; }
+  .lead { font-size:18px; line-height:1.6; color:var(--text-dim); max-width:66ch; margin:0 0 20px; }
+  .sec { display:flex; align-items:baseline; gap:14px; margin:52px 0 14px; padding-top:26px; border-top:1px solid var(--border); }
+  .sec .num { font-family:var(--font-mono); font-size:13px; font-weight:600; color:var(--accent); }
+  .sec h2 { font-family:var(--font-head); font-size:23px; font-weight:600; letter-spacing:-0.01em; margin:0; }
+  .prd p { margin:0 0 16px; max-width:68ch; }
+  .prd ul { margin:0; padding-left:20px; display:flex; flex-direction:column; gap:9px; max-width:68ch; }
+  .prd strong { font-weight:600; }
+  code { font-family:var(--font-mono); font-size:.86em; background:var(--bg-elev-2); padding:2px 6px; border-radius:var(--radius-sm); }
+  .lead code, .prd p code { color:var(--accent); }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 4px; }
+  .chip { font-family:var(--font-mono); font-size:12px; color:var(--text-dim); background:var(--bg-elev); border:1px solid var(--border); border-radius:999px; padding:4px 11px; }
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin-top:6px; }
+  .card { background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius-lg); padding:18px 20px; box-shadow:var(--shadow); }
+  .card .klabel { font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; font-weight:600; margin-bottom:10px; }
+  .klabel.ok { color:var(--ok); } .klabel.danger { color:var(--danger); } .klabel.accent { color:var(--accent); }
+
+  /* tables */
+  .tbl-wrap { border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow); margin:6px 0; }
+  table.tbl { width:100%; border-collapse:collapse; font-size:14.5px; }
+  table.tbl thead tr { background:var(--bg-elev-2); }
+  table.tbl th { text-align:left; font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-dim); font-weight:600; padding:11px 16px; }
+  table.tbl th.r, table.tbl td.r { text-align:right; }
+  table.tbl tbody tr { border-top:1px solid var(--border); }
+  table.tbl td { padding:11px 16px; vertical-align:top; }
+  table.tbl td.id { font-family:var(--font-mono); color:var(--text-dim); }
+  .badge { font-family:var(--font-mono); font-size:11px; font-weight:600; padding:2px 8px; border-radius:999px; }
+  .badge.p0 { background:color-mix(in srgb,var(--danger) 14%,transparent); color:var(--danger); }
+  .badge.p1 { background:color-mix(in srgb,var(--warn) 16%,transparent); color:var(--warn); }
+  .badge.p2 { background:color-mix(in srgb,var(--accent) 16%,transparent); color:var(--accent); }
+
+  /* diagrams */
+  .diagram-block { background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius-lg); padding:22px 24px; margin:20px 0; box-shadow:var(--shadow); }
+  .diagram-block .dhead { display:flex; align-items:baseline; gap:10px; }
+  .diagram-block .dnum { font-family:var(--font-mono); font-size:12px; font-weight:600; color:var(--accent); }
+  .diagram-block h3 { font-family:var(--font-head); font-size:17px; font-weight:600; margin:0; }
+  .diagram-block .why { color:var(--text-dim); font-size:13.5px; margin:6px 0 16px; }
+  .mermaid { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); padding:18px; overflow-x:auto; min-height:80px; }
+  .diagram-error { color:var(--danger); font-family:var(--font-mono); font-size:12px; white-space:pre-wrap; }
+  /* light/dark diagram swap (build inlines both) */
+  html[data-mode="dark"] .mmd-light { display:none; }
+  html:not([data-mode="dark"]) .mmd-dark { display:none; }
+
+  /* interactive visuals */
+  .tier-head { display:flex; align-items:center; gap:11px; margin:40px 0 4px; }
+  .tier-dot { width:9px; height:9px; border-radius:50%; }
+  .tier-1 .tier-dot { background:var(--ok); } .tier-2 .tier-dot { background:var(--accent); } .tier-3 .tier-dot { background:var(--warn); }
+  .tier-head h2 { font-family:var(--font-head); font-size:20px; font-weight:600; margin:0; }
+  .tier-label { font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-faint); }
+  .concept { background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius-lg); padding:24px; margin:14px 0; box-shadow:var(--shadow); }
+  .concept h3 { font-family:var(--font-head); font-size:17px; font-weight:600; margin:0 0 6px; }
+  .concept .lead { font-size:14px; color:var(--text-dim); max-width:68ch; margin:0 0 16px; }
+  .stage { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); padding:18px; }
+  .controls { display:flex; flex-wrap:wrap; gap:14px; align-items:flex-end; }
+  .controls label { font-size:13px; color:var(--text-dim); display:flex; flex-direction:column; gap:5px; }
+  .controls input[type="number"], .controls input[type="text"], .controls select { font:inherit; font-family:var(--font-mono); padding:6px 8px; background:var(--bg-elev); color:var(--text); border:1px solid var(--border); border-radius:var(--radius-sm); }
+  input[type="range"] { accent-color:var(--accent); }
+  button.action { background:var(--accent); color:var(--accent-contrast); border:1px solid transparent; font-family:var(--font-body); font-weight:600; font-size:14px; padding:9px 15px; border-radius:var(--radius); cursor:pointer; }
+  button.action.secondary { background:var(--bg-elev); color:var(--text); border:1px solid var(--border); }
+  .readout { font-family:var(--font-mono); font-size:13px; color:var(--ok); }
+  canvas { max-width:100%; display:block; }
+
+  /* ============ Decisions tab (rendered from JSON) ============ */
+  .dec-meta { display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin:18px 0 4px; }
+  .dec-count { font-family:var(--font-mono); font-size:12px; color:var(--text-dim); }
+  .dec-count b { color:var(--accent); font-weight:600; }
+  .dec-reset { background:var(--bg-elev); color:var(--text); border:1px solid var(--border); font-family:var(--font-body); font-weight:600; font-size:13px; padding:7px 13px; border-radius:var(--radius); cursor:pointer; }
+  .dec-group { display:flex; align-items:center; gap:11px; margin:38px 0 4px; }
+  .dec-group .dot { width:9px; height:9px; border-radius:50%; background:var(--accent); }
+  .dec-group h2 { font-family:var(--font-head); font-size:20px; font-weight:600; margin:0; }
+  .dec-card { background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px 22px; margin:14px 0; box-shadow:var(--shadow); }
+  .dec-card .top { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .dec-card h3 { font-family:var(--font-head); font-size:17px; font-weight:600; margin:0; }
+  .dec-status { flex:none; font-family:var(--font-mono); font-size:11px; font-weight:600; letter-spacing:.03em; padding:2px 9px; border-radius:999px; }
+  .dec-status.you { background:color-mix(in srgb,var(--accent) 14%,transparent); color:var(--accent); }
+  .dec-status.auto { background:var(--bg-elev-2); color:var(--text-dim); }
+  .dec-q { color:var(--text-dim); font-size:13.5px; margin:6px 0 14px; }
+  .dec-opts { display:flex; flex-wrap:wrap; gap:8px; }
+  .dec-opt { display:inline-flex; align-items:center; gap:8px; font-family:var(--font-body); font-size:13.5px; font-weight:500; color:var(--text-dim); background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); padding:8px 12px; cursor:pointer; text-align:left; }
+  .dec-opt[aria-pressed="true"] { font-weight:600; color:var(--text); background:color-mix(in srgb,var(--accent) 10%,transparent); border-color:var(--accent); }
+  .dec-opt .asbuilt { font-family:var(--font-mono); font-size:10px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:var(--text-faint); border:1px solid var(--border); border-radius:999px; padding:1px 6px; }
+  .dec-note { margin-top:15px; padding-top:14px; border-top:1px dashed var(--border); font-size:14px; line-height:1.6; color:var(--text); max-width:74ch; }
+  .dec-whatif { margin-top:10px; font-family:var(--font-mono); font-size:12px; color:var(--warn); }
+
+  /* ============ Floating "Design system" config panel ============ */
+  .cfg-fabwrap { position:fixed; right:22px; bottom:22px; z-index:60; display:flex; flex-direction:column; align-items:flex-end; gap:12px; }
+  .cfg-fab { display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:12px; font-weight:600; letter-spacing:.02em; color:var(--accent-contrast); background:var(--accent); border:1px solid transparent; border-radius:999px; padding:10px 16px; cursor:pointer; box-shadow:0 6px 18px rgba(0,0,0,.18); }
+  .cfg-panel { width:272px; background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius-lg); box-shadow:0 16px 40px rgba(0,0,0,.22); padding:16px 16px 18px; display:none; }
+  .cfg-panel.open { display:block; }
+  .cfg-title { font-family:var(--font-mono); font-size:11px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--text-faint); margin-bottom:14px; }
+  .cfg-group { margin-bottom:14px; }
+  .cfg-group:last-child { margin-bottom:0; }
+  .cfg-glabel { font-size:12px; color:var(--text-dim); margin-bottom:6px; }
+  .seg { display:flex; gap:3px; background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); padding:3px; }
+  .seg button { flex:1; appearance:none; border:none; border-radius:calc(var(--radius) - 1px); background:transparent; color:var(--text-dim); font-family:var(--font-body); font-size:12px; font-weight:500; padding:7px 4px; cursor:pointer; }
+  .seg button[aria-pressed="true"] { background:var(--bg-elev); color:var(--text); font-weight:600; box-shadow:var(--shadow); }
+  .cfg-accents { display:flex; gap:10px; }
+  .cfg-swatch { width:26px; height:26px; border-radius:50%; border:2px solid transparent; cursor:pointer; padding:0; box-shadow:0 0 0 1px var(--border); }
+  .cfg-swatch[aria-pressed="true"] { border-color:var(--text); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="site">
+    <div class="header-inner">
+      <div class="header-top">
+        <div>
+          <div class="eyebrow">{{EYEBROW}}</div>
+          <div class="doc-title">{{PROJECT_TITLE}}</div>
+        </div>
+        <button class="mode-pill" id="cfg-mode"><span id="cfg-mode-glyph">☀</span><span id="cfg-mode-label">Light</span></button>
+      </div>
+      <nav class="tabs" role="tablist">
+        <button role="tab" aria-selected="true" data-tab="decisions">01 / Decisions</button>
+        <button role="tab" aria-selected="false" data-tab="prd">02 / PRD</button>
+        <button role="tab" aria-selected="false" data-tab="diagrams">03 / Diagrams</button>
+        <button role="tab" aria-selected="false" data-tab="visuals">04 / Interactive</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===================== DECISIONS (rendered from #design-decisions JSON) ===================== -->
+    <section class="panel active" id="decisions" role="tabpanel">
+      <h1 class="tab-h1">Engineering decisions</h1>
+      <p class="lead">Every fork hit while building this — the options that were on the table, and the path taken. Tap any option to explore a different choice; the rationale updates so you can weigh the trade-off.</p>
+      <div class="dec-meta">
+        <span class="dec-count" id="dec-count"></span>
+        <button class="dec-reset" id="dec-reset">Reset to as-built</button>
+      </div>
+      <div id="dec-body"></div>
+    </section>
+
+    <!-- ===================== PRD ===================== -->
+    <section class="panel prd" id="prd" role="tabpanel">
+      {{PRD_CONTENT}}
+    </section>
+
+    <!-- ===================== DIAGRAMS ===================== -->
+    <section class="panel" id="diagrams" role="tabpanel">
+      {{DIAGRAMS_CONTENT}}
+    </section>
+
+    <!-- ===================== INTERACTIVE ===================== -->
+    <section class="panel" id="visuals" role="tabpanel">
+      {{VISUALS_CONTENT}}
+    </section>
+  </main>
+</div>
+
+<!-- ===================== Floating Design-system panel ===================== -->
+<div class="cfg-fabwrap">
+  <div class="cfg-panel" id="cfg-panel">
+    <div class="cfg-title">Design system</div>
+    <div class="cfg-group">
+      <div class="cfg-glabel">Mode</div>
+      <div class="seg" id="seg-mode">
+        <button data-v="light">Light</button><button data-v="dark">Dark</button>
+      </div>
+    </div>
+    <div class="cfg-group">
+      <div class="cfg-glabel">Vibe</div>
+      <div class="seg" id="seg-direction">
+        <button data-v="swiss">Swiss</button><button data-v="technical">Technical</button><button data-v="saas">SaaS</button>
+      </div>
+    </div>
+    <div class="cfg-group">
+      <div class="cfg-glabel">Typeface</div>
+      <div class="seg" id="seg-typeface">
+        <button data-v="plex">Plex</button><button data-v="grotesk">Grotesk</button><button data-v="editorial">Editorial</button>
+      </div>
+    </div>
+    <div class="cfg-group">
+      <div class="cfg-glabel">Accent</div>
+      <div class="cfg-accents" id="cfg-accents"></div>
+    </div>
+  </div>
+  <button class="cfg-fab" id="cfg-fab">✦ Design</button>
+</div>
+
+<script>
+  // ---- Mermaid setup (authoring only; the build pre-renders to inline SVG). ----
+  if (typeof mermaid !== "undefined") {
+    mermaid.initialize({ startOnLoad: false, theme: "default", securityLevel: "strict",
+      flowchart: { useMaxWidth: true }, sequence: { useMaxWidth: true } });
+  }
+  let diagramsRendered = false;
+  async function renderDiagrams() {
+    if (diagramsRendered) return;
+    if (typeof mermaid === "undefined") { diagramsRendered = true; return; } // built file: already inlined
+    diagramsRendered = true;
+    for (const el of document.querySelectorAll('#diagrams .mermaid')) {
+      if (el.dataset.rendered || el.querySelector('svg')) continue;
+      try {
+        const id = 'mmd-' + Math.floor(performance.now() * 1000) + '-' + Math.random().toString(36).slice(2);
+        const { svg } = await mermaid.render(id, el.textContent);
+        el.innerHTML = svg;
+      } catch (e) {
+        el.innerHTML = '<div class="diagram-error">Diagram failed to render:\n' + (e && e.message ? e.message : e) + '</div>';
+        diagramsRendered = false;
+      }
+    }
+  }
+
+  // ---- Tabs ----
+  const tabButtons = document.querySelectorAll('nav.tabs button');
+  const panels = document.querySelectorAll('.panel');
+  tabButtons.forEach(btn => btn.addEventListener('click', () => {
+    tabButtons.forEach(b => b.setAttribute('aria-selected', b === btn ? 'true' : 'false'));
+    const target = btn.dataset.tab;
+    panels.forEach(p => p.classList.toggle('active', p.id === target));
+    if (target === 'diagrams') renderDiagrams();
+  }));
+
+  // ---- Decisions tab: render the interactive what-if explorer from the JSON. ----
+  (function () {
+    let log;
+    try { log = JSON.parse(document.getElementById('design-decisions').textContent || "{}"); } catch (e) { log = {}; }
+    // Accept either {groups:[{cat,decisions:[...]}]} or a flat {decisions:[...]} (grouped by `category`).
+    let groups = log.groups;
+    if (!groups && Array.isArray(log.decisions)) {
+      const by = {};
+      log.decisions.forEach(d => { const c = d.category || "Decisions"; (by[c] = by[c] || []).push(d); });
+      groups = Object.keys(by).map(c => ({ cat: c, decisions: by[c] }));
+    }
+    groups = groups || [];
+    const body = document.getElementById('dec-body');
+    const countEl = document.getElementById('dec-count');
+    if (!body) return;
+
+    // normalize options to [{label, note}]; track choice per decision
+    const state = [];
+    groups.forEach(g => g.decisions.forEach(d => {
+      const opts = (d.options || []).map(o => typeof o === "string" ? { label: o, note: d.note || d.rationale || "" } : o);
+      const asBuilt = d.asBuilt || d.decision || (opts[0] && opts[0].label);
+      state.push({ d, opts, asBuilt, choice: asBuilt });
+    }));
+
+    function noteFor(s) {
+      const o = s.opts.find(o => o.label === s.choice);
+      return (o && o.note) || s.d.note || s.d.rationale || "";
+    }
+    function changedCount() { return state.filter(s => s.choice !== s.asBuilt).length; }
+    function updateCount() {
+      countEl.innerHTML = state.length + " decisions · <b>" + changedCount() + "</b> changed from as-built";
+    }
+
+    let si = 0;
+    groups.forEach(g => {
+      const gh = document.createElement('div'); gh.className = 'dec-group';
+      gh.innerHTML = '<span class="dot"></span><h2></h2>'; gh.querySelector('h2').textContent = g.cat;
+      body.appendChild(gh);
+      g.decisions.forEach(d => {
+        const s = state[si++];
+        const card = document.createElement('div'); card.className = 'dec-card';
+        const decidedBy = (d.decidedBy === "user") ? "you" : "auto";
+        card.innerHTML =
+          '<div class="top"><h3></h3><span class="dec-status ' + decidedBy + '">' + decidedBy + '</span></div>' +
+          '<p class="dec-q"></p><div class="dec-opts"></div>' +
+          '<div class="dec-note"></div><div class="dec-whatif" style="display:none"></div>';
+        card.querySelector('h3').textContent = d.title || d.question || d.id || "Decision";
+        card.querySelector('.dec-q').textContent = d.question || "";
+        const optsWrap = card.querySelector('.dec-opts');
+        const noteEl = card.querySelector('.dec-note');
+        const whatif = card.querySelector('.dec-whatif');
+        function paint() {
+          [...optsWrap.children].forEach(b => b.setAttribute('aria-pressed', b.dataset.label === s.choice ? "true" : "false"));
+          noteEl.textContent = noteFor(s);
+          if (s.choice !== s.asBuilt) { whatif.style.display = ""; whatif.textContent = "↪ what-if · as-built choice was “" + s.asBuilt + "”"; }
+          else { whatif.style.display = "none"; }
+          updateCount();
+        }
+        s.opts.forEach(o => {
+          const b = document.createElement('button'); b.className = 'dec-opt'; b.dataset.label = o.label;
+          b.innerHTML = '<span></span>'; b.firstChild.textContent = o.label;
+          if (o.label === s.asBuilt) { const t = document.createElement('span'); t.className = 'asbuilt'; t.textContent = 'as built'; b.appendChild(t); }
+          b.addEventListener('click', () => { s.choice = o.label; paint(); });
+          optsWrap.appendChild(b);
+        });
+        card.querySelector('h3').after();
+        body.appendChild(card);
+        s._paint = paint; paint();
+      });
+    });
+    updateCount();
+    const reset = document.getElementById('dec-reset');
+    if (reset) reset.addEventListener('click', () => { state.forEach(s => { s.choice = s.asBuilt; s._paint && s._paint(); }); });
+  })();
+
+  // ---- Design-system config switcher (mode / direction / typeface / accent). ----
+  (function () {
+    const root = document.documentElement;
+    const KEY = "blueprint-theme";
+    const ACCENTS = ["#2563eb", "#0d9488", "#e2562b", "#4f46e5", "#111418"];
+    const store = {
+      get() { try { return JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { return {}; } },
+      set(o) { try { localStorage.setItem(KEY, JSON.stringify(o)); } catch (e) {} },
+    };
+    function curAccent() { return (root.style.getPropertyValue("--accent") || "#2563eb").trim().toLowerCase(); }
+    function persist() {
+      store.set({ mode: root.dataset.mode, direction: root.dataset.direction,
+        typeface: root.dataset.typeface, accent: curAccent() });
+    }
+    // restore
+    const s = store.get();
+    if (s.mode) root.dataset.mode = s.mode;
+    if (s.direction) root.dataset.direction = s.direction;
+    if (s.typeface) root.dataset.typeface = s.typeface;
+    if (s.accent) root.style.setProperty("--accent", s.accent);
+
+    function syncSeg(id, val) {
+      document.querySelectorAll('#' + id + ' button').forEach(b =>
+        b.setAttribute('aria-pressed', b.dataset.v === val ? "true" : "false"));
+    }
+    function setMode(m) { root.dataset.mode = m; const g = document.getElementById('cfg-mode-glyph'), l = document.getElementById('cfg-mode-label');
+      if (g) g.textContent = m === "dark" ? "☾" : "☀"; if (l) l.textContent = m === "dark" ? "Dark" : "Light"; syncSeg('seg-mode', m); persist(); }
+    function setDir(v) { root.dataset.direction = v; syncSeg('seg-direction', v); persist(); }
+    function setType(v) { root.dataset.typeface = v; syncSeg('seg-typeface', v); persist(); }
+    function setAccent(c) { root.style.setProperty("--accent", c); root.style.setProperty("--accent-contrast", "#ffffff");
+      document.querySelectorAll('#cfg-accents button').forEach(b => b.setAttribute('aria-pressed', b.dataset.c === c.toLowerCase() ? "true" : "false")); persist(); }
+
+    document.querySelectorAll('#seg-mode button').forEach(b => b.addEventListener('click', () => setMode(b.dataset.v)));
+    document.querySelectorAll('#seg-direction button').forEach(b => b.addEventListener('click', () => setDir(b.dataset.v)));
+    document.querySelectorAll('#seg-typeface button').forEach(b => b.addEventListener('click', () => setType(b.dataset.v)));
+    const accWrap = document.getElementById('cfg-accents');
+    ACCENTS.forEach(c => { const b = document.createElement('button'); b.className = 'cfg-swatch'; b.style.background = c; b.dataset.c = c.toLowerCase(); b.title = c;
+      b.addEventListener('click', () => setAccent(c)); accWrap.appendChild(b); });
+
+    document.getElementById('cfg-mode').addEventListener('click', () => setMode(root.dataset.mode === "dark" ? "light" : "dark"));
+    document.getElementById('cfg-fab').addEventListener('click', () => document.getElementById('cfg-panel').classList.toggle('open'));
+
+    // initial paint
+    setMode(root.dataset.mode || "light");
+    syncSeg('seg-direction', root.dataset.direction || "swiss");
+    syncSeg('seg-typeface', root.dataset.typeface || "plex");
+    document.querySelectorAll('#cfg-accents button').forEach(b => b.setAttribute('aria-pressed', b.dataset.c === curAccent() ? "true" : "false"));
+  })();
+
+  // ---- Interactive visuals init hook ----
+  window.__widgets = window.__widgets || [];
+  window.addEventListener('DOMContentLoaded', () => { window.__widgets.forEach(fn => { try { fn(); } catch (e) { console.error(e); } }); });
+</script>
+</body>
+</html>

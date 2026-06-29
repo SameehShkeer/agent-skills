@@ -1,0 +1,64 @@
+/* ============================================================================
+   project-blueprint design system
+   Imported verbatim from the Claude Design project "Design system for blueprint"
+   (claude.ai/design · file "Addy Blueprint.dc.html"). This is the LOCKED design
+   system for every artifact the skill produces — do not invent palettes, fonts,
+   or radii. It is configurable along four axes, all driven by attributes on the
+   root element (<html>) plus an inline accent:
+
+     data-mode      : (default = light via :root) | "dark"
+     data-direction : (default) | "technical" (tighter radii) | "saas" (rounder)
+     data-typeface  : (default = IBM Plex) | "grotesk" | "editorial"
+     --accent / --accent-contrast : any accent color + its readable contrast
+                                    (default #2563eb on #ffffff). The design's
+                                    accent presets: #2563eb #0d9488 #e2562b
+                                    #4f46e5 #111418. Direction values: swiss
+                                    (default) / technical / saas. Typeface:
+                                    plex (default) / grotesk / editorial.
+
+   The fonts load from Google Fonts; add this <link> in the document <head>:
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Serif:wght@400;500;600&family=Schibsted+Grotesk:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+   The font stacks fall back to system-ui, so offline the layout is intact and
+   only the exact typeface degrades.
+   ============================================================================ */
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+::selection { background: color-mix(in srgb, var(--accent) 22%, transparent); }
+
+:root {
+  --bg:#f6f7f8; --bg-elev:#ffffff; --bg-elev-2:#eef0f3;
+  --border:#e4e7eb; --border-strong:#cdd2da;
+  --text:#13161b; --text-dim:#565d68; --text-faint:#8b919c;
+  --accent:#2563eb; --accent-contrast:#ffffff;
+  --ok:#0a8f5f; --warn:#b9770a; --danger:#d1453b;
+  --shadow:0 1px 2px rgba(18,22,28,.04), 0 2px 8px rgba(18,22,28,.05);
+  --radius:5px; --radius-sm:3px; --radius-lg:8px;
+  --font-head:'IBM Plex Sans',system-ui,sans-serif;
+  --font-body:'IBM Plex Sans',system-ui,sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+[data-mode="dark"] {
+  --bg:#0a0b0e; --bg-elev:#121419; --bg-elev-2:#1a1d24;
+  --border:#262a32; --border-strong:#373c47;
+  --text:#e9ebf0; --text-dim:#99a0ac; --text-faint:#6a7180;
+  --ok:#34c08c; --warn:#e0a13a; --danger:#f06a5f;
+  --shadow:0 1px 2px rgba(0,0,0,.35), 0 4px 14px rgba(0,0,0,.3);
+}
+[data-direction="technical"] { --radius:3px; --radius-sm:2px; --radius-lg:4px; }
+[data-direction="saas"] { --radius:10px; --radius-sm:7px; --radius-lg:16px; }
+[data-typeface="grotesk"] {
+  --font-head:'Schibsted Grotesk',system-ui,sans-serif;
+  --font-body:'Hanken Grotesk',system-ui,sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+[data-typeface="editorial"] {
+  --font-head:'IBM Plex Serif',Georgia,serif;
+  --font-body:'IBM Plex Sans',system-ui,sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+
+/* Rendered diagrams scale to their container (generalized from .addy-diagram). */
+.mermaid svg, .diagram svg { max-width:100%; height:auto; display:block; margin:0 auto; }

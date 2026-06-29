@@ -1,0 +1,13 @@
+{
+  "name": "project-blueprint-scripts",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Build + validate tooling for the project-blueprint skill. build_blueprint.mjs renders diagrams to inline SVG and smoke-tests widgets in a headless browser.",
+  "scripts": {
+    "build": "node build_blueprint.mjs"
+  },
+  "dependencies": {
+    "puppeteer": "^23"
+  }
+}

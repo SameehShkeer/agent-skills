@@ -1,0 +1,30 @@
+name: 🐛 Bug report
+description: Something in a skill doesn't work as documented
+title: "[bug] <skill>: <short summary>"
+labels: ["bug"]
+body:
+  - type: input
+    id: skill
+    attributes:
+      label: Which skill?
+      placeholder: project-blueprint
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you expect, and what did you get instead?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: The prompt you used and any relevant output.
+      render: shell
+  - type: input
+    id: env
+    attributes:
+      label: Environment
+      placeholder: Claude Code vX.Y on macOS / Linux / Windows

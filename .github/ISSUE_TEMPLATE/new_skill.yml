@@ -1,0 +1,31 @@
+name: ✨ Propose a new skill
+description: Suggest a skill to add to the collection
+title: "[skill] <proposed-name>"
+labels: ["new-skill"]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Proposed skill name
+      description: lower-kebab-case
+      placeholder: changelog-writer
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What would it do, and when should it trigger?
+      description: This is the heart of a skill's description — what it produces and the situations it's for.
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: What does it produce?
+      description: The concrete deliverable (a file, a report, a transform…).
+  - type: checkboxes
+    id: offer
+    attributes:
+      label: Are you offering to build it?
+      options:
+        - label: I'd like to contribute this skill myself (see CONTRIBUTING.md)

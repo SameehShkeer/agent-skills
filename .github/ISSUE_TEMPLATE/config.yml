@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 🔐 Report a security issue
+    url: https://github.com/SameehShkeer/agent-skills/security/advisories/new
+    about: Please report vulnerabilities privately — see SECURITY.md. Do not open a public issue.
+  - name: 📖 Agent Skills docs
+    url: https://code.claude.com/docs/en/skills
+    about: How Agent Skills work in Claude Code.

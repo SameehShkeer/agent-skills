@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "sameeh-skills",
+  "owner": {
+    "name": "Sameeh Shkeer",
+    "email": "s.shkeer@gmail.com"
+  },
+  "description": "A growing, hand-built collection of Agent Skills for Claude Code — each one a self-contained, installable capability.",
+  "plugins": [
+    {
+      "name": "project-blueprint",
+      "source": "./skills/project-blueprint",
+      "description": "Turn a project idea into one self-contained HTML file with four tabs: an interactive Decisions log, a full PRD, Mermaid diagrams (class/component/sequence/activity/state), and hands-on teaching widgets. Ships a configurable light/dark design system.",
+      "version": "1.0.0",
+      "license": "MIT",
+      "category": "planning",
+      "keywords": ["prd", "design-doc", "diagrams", "mermaid", "blueprint", "system-design", "architecture"]
+    }
+  ]
+}

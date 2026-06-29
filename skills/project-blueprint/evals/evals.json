@@ -1,0 +1,94 @@
+{
+  "skill_name": "project-blueprint",
+  "notes": "Assertions named so they read clearly in a results viewer. The build_blueprint.mjs / check_structure.py scripts can grade the mechanical ones; the 'qualitative' ones need human or LLM judgment (don't force a script onto them).",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "I want to build a URL shortener like bit.ly. Users paste a long URL, get a short link back, and when someone hits the short link it redirects them. I also want basic click analytics per link. Spec it out for me.",
+      "expected_output": "Self-contained HTML blueprint for a URL shortener; 5 project-specific diagrams; interactive visuals laddering hashing -> collision handling -> cache/scale.",
+      "assertions": [
+        {"name": "single_self_contained_html", "type": "mechanical", "check": "exactly one .html file; passes build_blueprint.mjs (no CDN dependency in shipped file)"},
+        {"name": "three_tabs_present", "type": "mechanical", "check": "PRD, Diagrams, Interactive Visuals tabs with working nav"},
+        {"name": "five_diagram_kinds", "type": "mechanical", "check": "class, component, sequence, activity, state all present"},
+        {"name": "all_diagrams_render", "type": "mechanical", "check": "every Mermaid block parses/renders with zero errors"},
+        {"name": "three_difficulty_tiers", "type": "mechanical", "check": "tier-1/2/3 all present"},
+        {"name": "widgets_interactive", "type": "mechanical", "check": "2-4 widgets; no console errors; each control produces a visible change"},
+        {"name": "substantial_prd", "type": "mechanical", "check": "real PRD with functional requirements + multiple sections"},
+        {"name": "decision_log_auto_mode", "type": "mechanical", "check": "embedded design-decisions JSON present (grouped, per-option notes, asBuilt), mode=auto, decidedBy=default; Decisions tab renders interactive cards from it"},
+        {"name": "diagrams_match_domain", "type": "qualitative", "check": "diagrams use real entities (Link/ClickEvent/redirect), agree with the PRD data model"},
+        {"name": "concepts_are_load_bearing", "type": "qualitative", "check": "visuals teach hashing/collision/caching specifically, not generic CS"}
+      ],
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "Help me design a habit-tracking mobile app. People create habits, check them off each day, and the app tracks streaks. I want to be able to see the whole thing planned out with diagrams and something that explains how the streak logic works.",
+      "expected_output": "Blueprint for a habit tracker; diagrams of Habit/Entry/Streak; interactive streak-logic explainer (counting -> grace/break -> timezone boundaries).",
+      "assertions": [
+        {"name": "single_self_contained_html", "type": "mechanical", "check": "one .html; passes build_blueprint.mjs"},
+        {"name": "five_diagram_kinds", "type": "mechanical", "check": "all five present"},
+        {"name": "all_diagrams_render", "type": "mechanical", "check": "zero Mermaid errors"},
+        {"name": "widgets_interactive", "type": "mechanical", "check": "2-4 interactive widgets, no console errors"},
+        {"name": "streak_logic_explained_interactively", "type": "qualitative", "check": "a widget actually demonstrates streak counting / break / timezone edge"}
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "We're building an internal tool at my company for engineers to request and get approval for cloud resources (like spinning up a new database or VM). Request goes through a manager approval then a finance check. Can you put together a blueprint with the requirements, architecture diagrams, and an interactive explainer of the approval workflow?",
+      "expected_output": "Blueprint for an approval/provisioning tool; multi-stage approval state machine; interactive explainer of the approval routing.",
+      "assertions": [
+        {"name": "single_self_contained_html", "type": "mechanical", "check": "one .html; passes build_blueprint.mjs"},
+        {"name": "five_diagram_kinds", "type": "mechanical", "check": "all five present; state diagram models the request lifecycle"},
+        {"name": "all_diagrams_render", "type": "mechanical", "check": "zero Mermaid errors"},
+        {"name": "approval_flow_interactive", "type": "qualitative", "check": "a widget walks through the manager->finance approval routing with branches"}
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "i wanna build a tracker app",
+      "expected_output": "AMBIGUOUS PROMPT (tests workflow step 1). Skill should ask one or two sharp clarifying questions (tracker of what? for whom?) OR proceed on a clearly-stated assumption documented in the PRD — not silently guess, and not refuse to start.",
+      "assertions": [
+        {"name": "handles_ambiguity_well", "type": "qualitative", "check": "either asks 1-2 sharp questions, or picks a concrete interpretation and STATES the assumption in the PRD; does not produce a vague generic blueprint"},
+        {"name": "still_produces_valid_artifact_after_scoping", "type": "mechanical", "check": "once scoped, output passes build_blueprint.mjs with all five diagrams and interactive widgets"}
+      ],
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "I want to plan out a home solar + battery sizing planner — you put in your roof size, location, and average power bill, and it tells you how many panels and what battery capacity you'd need, plus payback time. Give me the full blueprint.",
+      "expected_output": "NON-CRUD / domain-modeling project (tests whether the 5-diagram + data-model framing strains on a calculation-heavy, non-SaaS domain). Should still produce sensible diagrams (entities like Roof/PanelArray/Battery/TariffPlan; a sizing-calculation activity flow) and visuals that teach the sizing/payback math interactively.",
+      "assertions": [
+        {"name": "single_self_contained_html", "type": "mechanical", "check": "one .html; passes build_blueprint.mjs"},
+        {"name": "five_diagram_kinds", "type": "mechanical", "check": "all five present and not forced/empty"},
+        {"name": "diagrams_sensible_for_non_crud", "type": "qualitative", "check": "class/state diagrams aren't contrived; activity diagram captures the real sizing calculation"},
+        {"name": "math_taught_interactively", "type": "qualitative", "check": "a widget lets the reader vary roof size / bill and see panels/battery/payback respond"}
+      ],
+      "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "Build me a blueprint for a Pomodoro-style focus timer that adapts the work/break intervals based on how often you skip or extend sessions. I care most about understanding the adaptive-interval algorithm.",
+      "expected_output": "ALGORITHM-HEAVY project (stresses the Interactive Visuals tiering more than the PRD). Should produce a tier-laddered explainer of the adaptive-interval algorithm (basic timer -> how adaptation responds to skips/extends -> convergence/edge behavior), with diagrams (state machine of timer phases; activity flow of the adaptation rule).",
+      "assertions": [
+        {"name": "single_self_contained_html", "type": "mechanical", "check": "one .html; passes build_blueprint.mjs"},
+        {"name": "all_diagrams_render", "type": "mechanical", "check": "zero Mermaid errors; state diagram of timer phases present"},
+        {"name": "algorithm_laddered_basic_to_advanced", "type": "qualitative", "check": "visuals build from a plain timer up to the adaptive rule and its edge behavior, each tier genuinely interactive"}
+      ],
+      "files": []
+    },
+    {
+      "id": 6,
+      "prompt": "grill me — I want to build a personal finance app that imports bank transactions, categorizes them, and shows monthly budgets vs actuals.",
+      "expected_output": "GRILL-ME MODE (tests workflow step 2). Skill should INTERVIEW the user on the load-bearing design decisions for this project (e.g. TDD?, DDD or CRUD?, architecture style, SQL vs NoSQL, sync import vs background jobs, auth, how categorization works) using the interactive question tool with recommended defaults, then build the blueprint reflecting those answers. The embedded decision log should have mode=grilled and decidedBy=user on the answered decisions.",
+      "assertions": [
+        {"name": "interviews_before_building", "type": "qualitative", "check": "asks the user a focused set of design-decision questions (not a generic questionnaire) before generating the artifact; questions fit a finance app (persistence, categorization, jobs, auth)"},
+        {"name": "decision_log_grilled_mode", "type": "mechanical", "check": "embedded design-decisions JSON has mode=grilled and the interviewed decisions are decidedBy=user with the user's chosen option recorded"},
+        {"name": "decisions_propagate", "type": "qualitative", "check": "the chosen architecture/persistence/etc. visibly shape the diagrams and PRD (not a generic build that ignores the answers)"},
+        {"name": "single_self_contained_html", "type": "mechanical", "check": "final output passes build_blueprint.mjs"}
+      ],
+      "files": []
+    }
+  ]
+}
