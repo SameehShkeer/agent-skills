@@ -6,8 +6,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 [![Works with Claude Code](https://img.shields.io/badge/Works%20with-Claude%20Code-d97757?style=flat-square)](https://code.claude.com/docs/en/skills)
-[![Skills](https://img.shields.io/badge/skills-1-success?style=flat-square)](#-skills)
-[![Last commit](https://img.shields.io/github/last-commit/SameehShkeer/agent-skills?style=flat-square)](https://github.com/SameehShkeer/agent-skills/commits)
+[![Live demo](https://img.shields.io/badge/live-demo-2563eb?style=flat-square)](https://sameehshkeer.github.io/agent-skills/examples/project-blueprint-addy-demo.html)
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/hero-dark.png">
@@ -48,6 +47,8 @@ mkdir -p ~/.claude/skills
 ln -s ~/src/agent-skills/skills/project-blueprint ~/.claude/skills/project-blueprint
 ```
 
+(Restart Claude Code if `/project-blueprint` doesn't appear yet.)
+
 Then, in Claude Code:
 
 ```text
@@ -55,6 +56,12 @@ Then, in Claude Code:
 ```
 
 You'll get a `*-blueprint.html` you can open in any browser. ✨
+
+> **Optional — fully-offline build.** The skill works out of the box and produces
+> a working HTML file. For the extra polish (diagrams pre-rendered to inline SVG in
+> both themes, CDN stripped, every widget headless-tested), run a one-time
+> `npm install` in `skills/project-blueprint/scripts/` (needs Node 18+). Without it,
+> the zero-dependency Python check still validates the structure.
 
 **▶️ [See a real output (live demo)](https://sameehshkeer.github.io/agent-skills/examples/project-blueprint-addy-demo.html)** — the actual generated HTML, hosted on GitHub Pages.
 
@@ -93,7 +100,7 @@ Add `grill me` to be interviewed on the design decisions (TDD, DDD, architecture
 
 <br>
 
-- A single `.html` file — three sections of content (Decisions/PRD/Diagrams/Interactive) plus a floating **✦ Design** panel to switch light/dark, "vibe" (corner radii), typeface, and accent.
+- A single `.html` file — four tabs (Decisions / PRD / Diagrams / Interactive) plus a floating **✦ Design** panel to switch light/dark, "vibe" (corner radii), typeface, and accent.
 - **Truly offline:** the build step renders each Mermaid diagram to inline SVG (in both light *and* dark) and strips the CDN, so the shipped file needs no network. The only external touch is Google Fonts, which gracefully falls back to system fonts offline.
 - **Validated before it ships:** a bundled headless-browser check renders every diagram, smoke-tests every widget, and confirms the Decisions tab and theme switcher work — in both themes.
 - Optional `grill me` mode interviews you on key engineering decisions and records them; otherwise it decides and logs them automatically.

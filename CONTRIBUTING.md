@@ -36,8 +36,7 @@ Keep the `SKILL.md` body under ~500 lines; push detail into `references/`. (Why:
 1. Copy `template/` → `skills/<name>/` and write your skill.
 2. Add an entry to [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json) (`name`, `source: "./skills/<name>"`, `description`, `version`, `license`).
 3. Run the validator locally: `python3 .github/scripts/validate_skills.py`
-4. Sign your commits (DCO): `git commit -s` — this adds a `Signed-off-by` line attesting you have the right to contribute the work under this repo's license. (We use the DCO, not a CLA.)
-5. Open a PR. The PR template includes a short **security review checklist** a maintainer will confirm before merge.
+4. Open a PR. By submitting it, you agree to license your contribution under this repo's [MIT License](LICENSE). (No CLA, no sign-off ceremony — keeping contribution light. A `git commit -s` DCO sign-off is welcome but not required.) The PR template includes a short **security review checklist** a maintainer will confirm before merge.
 
 ## The bar for merging
 

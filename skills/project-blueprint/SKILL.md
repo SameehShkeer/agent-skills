@@ -2,21 +2,18 @@
 name: project-blueprint
 description: >-
   Turns a project idea into one self-contained HTML file with four tabs: an
-  interactive Decisions log, a full PRD, a Diagrams tab (class, component,
-  sequence, activity, and state diagrams in Mermaid), and an Interactive Visuals
-  tab of hands-on widgets that teach the project's core concepts from basic to
-  advanced. Use when the user wants a
-  project planned, spec'd out, diagrammed, or explained as a single visual,
-  document-style deliverable they can open and read — e.g. "spec out this app",
-  "make a PRD / design doc / one-pager", "system design for X", "create diagrams
-  for this system", "turn my idea into a blueprint", or "build an interactive
-  explainer of how X works". Trigger even when the user never says "PRD" or
-  "blueprint" but is handing over a project to think through and wants a visual
-  artifact. Add "grill me" to interview the user on key design decisions (TDD,
-  DDD, architecture, SOLID); otherwise those are decided and logged automatically.
-  Do NOT use when the user wants you to write the actual application code, only a
-  single inline diagram, or a plain-text explanation — this produces a standalone
-  HTML document, not working software.
+  interactive Decisions log, a full PRD, Mermaid diagrams (class, component,
+  sequence, activity, state), and hands-on widgets that teach the project's core
+  concepts from basic to advanced. Use when the user wants a project planned,
+  spec'd out, diagrammed, or explained as a single visual, document-style
+  deliverable they can open and read — e.g. "spec out this app", "make a PRD /
+  design doc", "system design for X", "turn my idea into a blueprint", or "build
+  an interactive explainer of how X works". Trigger even when the user never says
+  "PRD" or "blueprint" but hands over a project to think through and wants a
+  visual artifact. Add "grill me" to interview the user on key design decisions
+  (TDD, DDD, architecture). Do NOT use when the user wants the actual application
+  code, a single inline diagram, or a plain-text explanation — this produces a
+  standalone HTML document, not working software.
 license: MIT
 compatibility: >-
   Authors a standalone HTML file — no external services. The optional build/validate
@@ -25,7 +22,7 @@ compatibility: >-
   in Claude Code.
 metadata:
   author: SameehShkeer
-  version: "3.0.0"
+  version: "1.0.0"
 ---
 
 # Project Blueprint

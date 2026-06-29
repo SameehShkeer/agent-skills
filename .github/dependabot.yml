@@ -1,0 +1,7 @@
+version: 2
+updates:
+  # Keep the pinned GitHub Actions in workflows up to date (no app ecosystem otherwise).
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

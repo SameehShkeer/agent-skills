@@ -10,7 +10,6 @@
 - [ ] `description` says **what it does AND when to use it** (≤ 1024 chars)
 - [ ] Added/updated the entry in `.claude-plugin/marketplace.json`
 - [ ] `python3 .github/scripts/validate_skills.py` passes locally
-- [ ] Commits are DCO signed-off (`git commit -s`)
 
 ## Security review (a maintainer will confirm before merge)
 

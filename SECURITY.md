@@ -22,7 +22,7 @@ Please include: the affected skill, a description, reproduction steps, the impac
 
 ## Our commitments
 
-- We aim to acknowledge reports within **48 hours**.
+- This is a small, maintainer-run project — we'll acknowledge reports on a **best-effort** basis, as fast as we reasonably can.
 - We coordinate a fix and disclose publicly only **after a patch is available** (coordinated disclosure), and we'll credit reporters who want credit.
 
 ## Scope
