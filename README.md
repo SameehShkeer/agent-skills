@@ -6,7 +6,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 [![Works with Claude Code](https://img.shields.io/badge/Works%20with-Claude%20Code-d97757?style=flat-square)](https://code.claude.com/docs/en/skills)
-[![Live demo](https://img.shields.io/badge/live-demo-2563eb?style=flat-square)](https://sameehshkeer.github.io/agent-skills/examples/project-blueprint-addy-demo.html)
+[![Live demo](https://img.shields.io/badge/live-demo-2563eb?style=flat-square)](https://sameehshkeer.github.io/agent-skills/examples/project-blueprint-calculator-demo.html)
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/hero-dark.png">
@@ -63,7 +63,7 @@ You'll get a `*-blueprint.html` you can open in any browser. ✨
 > `npm install` in `skills/project-blueprint/scripts/` (needs Node 18+). Without it,
 > the zero-dependency Python check still validates the structure.
 
-**▶️ [See a real output (live demo)](https://sameehshkeer.github.io/agent-skills/examples/project-blueprint-addy-demo.html)** — the actual generated HTML, hosted on GitHub Pages.
+**▶️ [See a real output (live demo)](https://sameehshkeer.github.io/agent-skills/examples/project-blueprint-calculator-demo.html)** — the actual generated HTML, hosted on GitHub Pages.
 
 ## 🧩 Skills
 
